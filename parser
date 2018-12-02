@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec  1 19:05:58 2018
+
+@author: sharatnimmagadda
+"""
+
+import csv
+import json
+
+with open('test.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    students = []
+    
+    for row in csv_reader:
+        try:
+            if line_count != 0:
+                work_exps_string = json.loads(row[0])['work_experiences']
+                courses_string = json.loads(row[1])['courses']
+                skills_string = json.loads(row[2])['skills']
+                student_current = []
+                
+                
+                
+                for work_exp_string in work_exps_string:
+                    for course_string in courses_string:
+                        for skill_string in skills_string:
+                            #work_exp = json.loads(work_exp_string)
+                            work_exp = work_exp_string
+                            courses = course_string
+                            skills = skill_string
+                            student = []
+                        
+                            student.append(work_exp['job_position_name'])
+                            student.append(work_exp['employer_name'])
+                            student.append(courses['name'])
+                            student.append(skills['name'])
+                            student_current.append(student)
+                            #print(student)
+                            
+                students.extend(student_current)                  
+        except:
+            continue
+        line_count += 1
+        
+with open('output.csv','w') as out_file:  
+     writer = csv.writer(out_file)
+     writer.writerows(students)
+out_file.close()
+        
